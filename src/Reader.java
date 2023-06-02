@@ -1,31 +1,32 @@
 
 import OfficialPart.*;
-import TransportationPart.Driver;
-import TransportationPart.Route;
+import People.Client;
+import People.Driver;
+import OfficialPart.Route;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 
 public class Reader {
+    static Scanner scannerConsole = new Scanner(System.in);
     static Scanner scanner;
 
     public static Calendar readDate() {
-        scanner = new Scanner(System.in);
         int day;
         do {
             System.out.print("  ->Enter the day: ");
-            day = scanner.nextInt();
+            day = scannerConsole.nextInt();
         } while (day > 30 || day < 1);
 
         int month;
         do {
             System.out.print("  ->Enter the month: ");
-            month = scanner.nextInt();
+            month = scannerConsole.nextInt();
         } while (month > 12 || month < 1);
 
         System.out.print("  ->Enter the year: ");
-        int year = scanner.nextInt();
+        int year = scannerConsole.nextInt();
 
         return new GregorianCalendar(year, month, day);
     }
@@ -42,6 +43,11 @@ public class Reader {
             e.printStackTrace();
         }
         return branches;
+    }
+
+    public static String readBranchName() {
+        System.out.print("Enter branch name: ");
+        return scannerConsole.next();
     }
 
     public static List<Client> readClients() {
@@ -72,6 +78,16 @@ public class Reader {
         return drivers;
     }
 
+    public static String readFirstName() {
+        System.out.print("Enter firstname: ");
+        return scannerConsole.next();
+    }
+
+    public static String readLastName() {
+        System.out.print("Enter lastname: ");
+        return scannerConsole.next();
+    }
+
     public static List<Route> readRoutes() {
         List<Route> routes = new LinkedList<>();
         try {
@@ -84,5 +100,10 @@ public class Reader {
             e.printStackTrace();
         }
         return routes;
+    }
+
+    public static String readRouteName() {
+        System.out.print("Enter route name: ");
+        return scannerConsole.next();
     }
 }

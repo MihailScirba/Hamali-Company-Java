@@ -1,6 +1,7 @@
 import OfficialPart.*;
-import TransportationPart.Driver;
-import TransportationPart.Route;
+import People.Client;
+import People.Driver;
+import OfficialPart.Route;
 
 import java.util.*;
 
@@ -88,15 +89,18 @@ public class HamaliCompany implements Menu {
                 2 - add new branch
                 3 - remove branch
                 4 - show info about drivers
-                5 - add new driver
-                6 - remove a driver
-                7 - show routes
-                8 - add new route
-                9 - remove a route
-                10 - show only clients
-                11 - show only contracts
-                12 - show clients and their contract
-                13 - sign new contract for a client
+                5 - show driver's salaries in a certain period
+                6 - add new driver
+                7 - remove a driver
+                8 - show routes
+                9 - add new route
+                10 - remove a route
+                11 - show only clients
+                12 - show the amount paid by each client
+                13 - show only contracts
+                14 - show clients and their contract
+                15 - sign new contract for a client
+                16 - show info about company
                 """ + RESET);
     }
 
@@ -115,17 +119,20 @@ public class HamaliCompany implements Menu {
             }
             case 1 -> showBranches();
             case 2 -> addBranch();
-            case 3 -> removeBranch(readBranchName());
+            case 3 -> removeBranch(Reader.readBranchName());
             case 4 -> showDrivers();
-            case 5 -> addDriver();
-            case 6 -> removeDriver(readFirstName(), readLastName());
-            case 7 -> showRoutes();
-            case 8 -> addRoute();
-            case 9 -> removeRoute(readRouteName());
-            case 10 -> showClients();
-            case 11 -> showContracts();
-            case 12 -> showClientsContracts();
-            case 13 -> signContract();
+            case 5 -> showDriversSalaries();
+            case 6 -> addDriver();
+            case 7 -> removeDriver(Reader.readFirstName(), Reader.readLastName());
+            case 8 -> showRoutes();
+            case 9 -> addRoute();
+            case 10 -> removeRoute(Reader.readRouteName());
+            case 11 -> showClients();
+            case 12 -> showClientsAmountPaid();
+            case 13 -> showContracts();
+            case 14 -> showClientsContracts();
+            case 15 -> signContract();
+            case 16 -> System.out.println(this);
         }
         return true;
     }
@@ -139,7 +146,7 @@ public class HamaliCompany implements Menu {
     }
 
     private void addBranch() {
-        String name = readBranchName();
+        String name = Reader.readBranchName();
 
         System.out.print("Enter location(city): ");
         String city = scanner.next();
@@ -157,11 +164,6 @@ public class HamaliCompany implements Menu {
         branches.removeIf(branch -> branch.getName().equals(name));
     }
 
-    private String readBranchName() {
-        System.out.print("Enter branch name: ");
-        return scanner.next();
-    }
-
     private void showDrivers() {
         System.out.println("Drivers: ");
         for (Driver driver : drivers) {
@@ -170,9 +172,28 @@ public class HamaliCompany implements Menu {
         System.out.println();
     }
 
+    private void showDriversSalaries() {
+        System.out.println("Start date:");
+        Calendar startDate = Reader.readDate();
+        System.out.println("End date:");
+        Calendar endDate = Reader.readDate();
+
+        int sum;
+        for (Driver driver : drivers) {
+            sum = 0;
+            for (Map.Entry<Client, Contract> clientContract : clientsContracts.entrySet()) {
+                if (driver.equals(clientContract.getValue().getDriver()) && clientContract.getValue().getDepartureDate().after(startDate) &&
+                        clientContract.getValue().getArrivalDate().before(endDate)) {
+                    sum += clientContract.getValue().getDriverSalary();
+                }
+            }
+            System.out.println(driver.getFirstName() + " " + driver.getLastName() + " - " + sum + " lei");
+        }
+    }
+
     private void addDriver() {
-        String firstName = readFirstName();
-        String lastName = readLastName();
+        String firstName = Reader.readFirstName();
+        String lastName = Reader.readLastName();
 
         System.out.print("Enter driver's work experience(years): ");
         int workExperience = scanner.nextInt();
@@ -187,16 +208,6 @@ public class HamaliCompany implements Menu {
         drivers.removeIf(driver -> driver.getFirstName().equals(firstName) && driver.getLastName().equals(lastName));
     }
 
-    private String readFirstName() {
-        System.out.print("Enter firstname: ");
-        return scanner.next();
-    }
-
-    private String readLastName() {
-        System.out.print("Enter lastname: ");
-        return scanner.next();
-    }
-
     private void showRoutes() {
         System.out.println("Routes: ");
         for (Route route : routes) {
@@ -206,7 +217,7 @@ public class HamaliCompany implements Menu {
     }
 
     private void addRoute() {
-        String name = readRouteName();
+        String name = Reader.readRouteName();
         System.out.print("Enter distance: ");
         int distance = scanner.nextInt();
 
@@ -217,17 +228,31 @@ public class HamaliCompany implements Menu {
         routes.removeIf(route -> route.getName().equals(name));
     }
 
-    private String readRouteName() {
-        System.out.print("Enter route name: ");
-        return scanner.next();
-    }
-
     private void showClients() {
         System.out.println("Clients:");
         for (Client client : clients) {
             System.out.println(client);
         }
         System.out.println();
+    }
+
+    private void showClientsAmountPaid() {
+        System.out.println("Start date:");
+        Calendar startDate = Reader.readDate();
+        System.out.println("End date:");
+        Calendar endDate = Reader.readDate();
+
+        int sum;
+        for (Client client : clients) {
+            sum = 0;
+            for (Map.Entry<Client, Contract> clientContract : clientsContracts.entrySet()) {
+                if (client.equals(clientContract.getKey()) && clientContract.getValue().getDepartureDate().after(startDate) &&
+                        clientContract.getValue().getArrivalDate().before(endDate)) {
+                    sum += clientContract.getValue().getDriverSalary();
+                }
+                System.out.println(client.getFirstName() + " " + client.getLastName() + " - " + sum + " lei");
+            }
+        }
     }
 
     private void showContracts() {
@@ -249,15 +274,15 @@ public class HamaliCompany implements Menu {
     private void signContract() {
         System.out.println("Which client will sign new contract?");
         showClients();
-        Client client = findClient(readFirstName(), readLastName());
+        Client client = findClient(Reader.readFirstName(), Reader.readLastName());
 
         System.out.println("\nChoose the route");
         showRoutes();
-        Route route = findRoute(readRouteName());
+        Route route = findRoute(Reader.readRouteName());
 
         System.out.println("\nChoose driver: ");
         showDrivers();
-        Driver driver = findDriver(readFirstName(), readLastName());
+        Driver driver = findDriver(Reader.readFirstName(), Reader.readLastName());
 
         System.out.println("\nEnter departure date: ");
         Calendar departureDate = Reader.readDate();
@@ -297,5 +322,16 @@ public class HamaliCompany implements Menu {
             }
         }
         return drivers.get(0);
+    }
+
+    @Override
+    public String toString() {
+        return "Name: " + getClass().getSimpleName() +
+                "\nNumber of branches: " + branches.size() +
+                "\nNumber of clients: " + clients.size() +
+                "\nNumber of drivers: " + drivers.size() +
+                "\nNumber of routes: " + routes.size() +
+                "\nNumber of contracts: " + clientsContracts.size() + "\n";
+
     }
 }

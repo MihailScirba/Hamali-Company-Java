@@ -1,8 +1,6 @@
-package OfficialPart;
+package People;
 
-public class Client {
-    private String firstName;
-    private String lastName;
+public class Client extends Person{
     private String phoneNumber;
 
     public Client() {
@@ -17,22 +15,6 @@ public class Client {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public String getPhoneNumber() {
