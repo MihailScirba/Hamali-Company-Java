@@ -1,6 +1,6 @@
 package OfficialPart;
 
-import TransportationPart.*;
+import People.Driver;
 
 import java.util.Calendar;
 

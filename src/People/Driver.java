@@ -1,8 +1,6 @@
-package TransportationPart;
+package People;
 
-public class Driver {
-    private String firstName;
-    private String lastName;
+public class Driver extends Person{
     private int workExperience;
     private String category;
 
@@ -20,22 +18,6 @@ public class Driver {
         this.lastName = lastName;
         this.workExperience = workExperience;
         this.category = category;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public int getWorkExperience() {
