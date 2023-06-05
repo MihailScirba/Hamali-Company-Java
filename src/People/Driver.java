@@ -20,6 +20,22 @@ public class Driver extends Person{
         this.category = category;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     public int getWorkExperience() {
         return workExperience;
     }
@@ -34,6 +50,11 @@ public class Driver extends Person{
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    @Override
+    String showFunction() {
+        return "My name is " + firstName + " " + lastName + ", i am a driver";
     }
 
     @Override
