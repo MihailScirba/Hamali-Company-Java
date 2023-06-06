@@ -89,7 +89,7 @@ public class Contract {
                 arrivalDate.getYear() +
                 "\n\t" + driver +
                 "\n\tkmPrice=" + kmPrice +
-                "\nDriver salary: " + getDriverSalary() +
+                "\n\tDriver salary: " + getDriverSalary() +
                 "\n}";
     }
 }
