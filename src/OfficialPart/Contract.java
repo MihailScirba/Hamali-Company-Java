@@ -2,12 +2,12 @@ package OfficialPart;
 
 import People.Driver;
 
-import java.util.Calendar;
+import java.time.LocalDate;
 
 public class Contract {
     private Route route;
-    private Calendar departureDate;
-    private Calendar arrivalDate;
+    private LocalDate departureDate;
+    private LocalDate arrivalDate;
     private Driver driver;
     private double kmPrice;
 
@@ -20,7 +20,7 @@ public class Contract {
         this.kmPrice = kmPrice;
     }
 
-    public Contract(Route route, Calendar departureDate, Calendar arrivalDate, Driver driver, double kmPrice) {
+    public Contract(Route route, LocalDate departureDate, LocalDate arrivalDate, Driver driver, double kmPrice) {
         this.route = route;
         this.departureDate = departureDate;
         this.arrivalDate = arrivalDate;
@@ -36,19 +36,19 @@ public class Contract {
         this.route = route;
     }
 
-    public Calendar getDepartureDate() {
+    public LocalDate getDepartureDate() {
         return departureDate;
     }
 
-    public void setDepartureDate(Calendar departureDate) {
+    public void setDepartureDate(LocalDate departureDate) {
         this.departureDate = departureDate;
     }
 
-    public Calendar getArrivalDate() {
+    public LocalDate getArrivalDate() {
         return arrivalDate;
     }
 
-    public void setArrivalDate(Calendar arrivalDate) {
+    public void setArrivalDate(LocalDate arrivalDate) {
         this.arrivalDate = arrivalDate;
     }
 
@@ -81,12 +81,12 @@ public class Contract {
     public String toString() {
         return "Contract{\n\t" +
                 route +
-                "\n\tdeparture date=" + departureDate.get(Calendar.DAY_OF_MONTH) + "." +
-                departureDate.get(Calendar.MONTH) + "." +
-                departureDate.get(Calendar.YEAR) +
-                ", arrival date=" + arrivalDate.get(Calendar.DAY_OF_MONTH) + "." +
-                arrivalDate.get(Calendar.MONTH) + "." +
-                arrivalDate.get(Calendar.YEAR) +
+                "\n\tdeparture date=" + departureDate.getDayOfMonth() + "." +
+                departureDate.getMonth() + "." +
+                departureDate.getYear() +
+                ", arrival date=" + arrivalDate.getDayOfMonth() + "." +
+                arrivalDate.getMonth() + "." +
+                arrivalDate.getYear() +
                 "\n\t" + driver +
                 "\n\tkmPrice=" + kmPrice +
                 "\nDriver salary: " + getDriverSalary() +

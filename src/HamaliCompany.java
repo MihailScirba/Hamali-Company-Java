@@ -1,9 +1,15 @@
-import OfficialPart.*;
+import OfficialPart.Branch;
+import OfficialPart.Contract;
+import OfficialPart.Route;
 import People.Client;
 import People.Driver;
-import OfficialPart.Route;
 
-import java.util.*;
+import java.time.LocalDate;
+import java.util.Scanner;
+import java.util.List;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.HashMap;
 
 public class HamaliCompany implements Menu {
     public static final String RESET = "\033[0m";
@@ -174,16 +180,15 @@ public class HamaliCompany implements Menu {
 
     private void showDriversSalaries() {
         System.out.println("Start date:");
-        Calendar startDate = Reader.readDate();
+        LocalDate startDate = Reader.readDate();
         System.out.println("End date:");
-        Calendar endDate = Reader.readDate();
-
+        LocalDate endDate = Reader.readDate();
         int sum;
         for (Driver driver : drivers) {
             sum = 0;
             for (Map.Entry<Client, Contract> clientContract : clientsContracts.entrySet()) {
-                if (driver.equals(clientContract.getValue().getDriver()) && clientContract.getValue().getDepartureDate().after(startDate) &&
-                        clientContract.getValue().getArrivalDate().before(endDate)) {
+                if (driver.equals(clientContract.getValue().getDriver()) && clientContract.getValue().getDepartureDate().isAfter(startDate) &&
+                        clientContract.getValue().getArrivalDate().isBefore(endDate)) {
                     sum += clientContract.getValue().getDriverSalary();
                 }
             }
@@ -238,16 +243,16 @@ public class HamaliCompany implements Menu {
 
     private void showClientsAmountPaid() {
         System.out.println("Start date:");
-        Calendar startDate = Reader.readDate();
+        LocalDate startDate = Reader.readDate();
         System.out.println("End date:");
-        Calendar endDate = Reader.readDate();
+        LocalDate endDate = Reader.readDate();
 
         int sum;
         for (Client client : clients) {
             sum = 0;
             for (Map.Entry<Client, Contract> clientContract : clientsContracts.entrySet()) {
-                if (client.equals(clientContract.getKey()) && clientContract.getValue().getDepartureDate().after(startDate) &&
-                        clientContract.getValue().getArrivalDate().before(endDate)) {
+                if (client.equals(clientContract.getKey()) && clientContract.getValue().getDepartureDate().isAfter(startDate) &&
+                        clientContract.getValue().getArrivalDate().isBefore(endDate)) {
                     sum += clientContract.getValue().getDriverSalary();
                 }
                 System.out.println(client.getFirstName() + " " + client.getLastName() + " - " + sum + " lei");
@@ -285,11 +290,11 @@ public class HamaliCompany implements Menu {
         Driver driver = findDriver(Reader.readFirstName(), Reader.readLastName());
 
         System.out.println("\nEnter departure date: ");
-        Calendar departureDate = Reader.readDate();
+        LocalDate departureDate = Reader.readDate();
 
 
         System.out.println("\nEnter arrival date: ");
-        Calendar arrivalDate = Reader.readDate();
+        LocalDate arrivalDate = Reader.readDate();
 
         System.out.print("\nEnter price per km: ");
         double kmPrice = scanner.nextDouble();

@@ -1,18 +1,20 @@
-
-import OfficialPart.*;
+import OfficialPart.Branch;
+import OfficialPart.Route;
 import People.Client;
 import People.Driver;
-import OfficialPart.Route;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Scanner;
 
 public class Reader {
     static Scanner scannerConsole = new Scanner(System.in);
     static Scanner scanner;
 
-    public static Calendar readDate() {
+    public static LocalDate readDate() {
         int day;
         do {
             System.out.print("  ->Enter the day: ");
@@ -28,7 +30,7 @@ public class Reader {
         System.out.print("  ->Enter the year: ");
         int year = scannerConsole.nextInt();
 
-        return new GregorianCalendar(year, month, day);
+        return LocalDate.of(year, month, day);
     }
 
     public static List<Branch> readBranches() {
