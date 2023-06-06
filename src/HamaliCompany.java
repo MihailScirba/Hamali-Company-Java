@@ -19,7 +19,7 @@ public class HamaliCompany implements Menu {
     private List<Driver> drivers;
     private List<Client> clients;
     private List<Route> routes;
-    private Map<Client, Contract> clientsContracts = new HashMap<>();
+    private Map<Contract, Client> clientsContracts = new HashMap<>();
 
     public HamaliCompany() {
         this.branches = new LinkedList<>();
@@ -36,7 +36,7 @@ public class HamaliCompany implements Menu {
     }
 
     public HamaliCompany(List<Branch> branches, List<Driver> drivers, List<Client> clients, List<Route> routes,
-                         Map<Client, Contract> clientsContracts) {
+                         Map<Contract, Client> clientsContracts) {
         this.branches = branches;
         this.drivers = drivers;
         this.clients = clients;
@@ -68,11 +68,11 @@ public class HamaliCompany implements Menu {
         this.clients = clients;
     }
 
-    public Map<Client, Contract> getClientsContracts() {
+    public Map<Contract, Client> getClientsContracts() {
         return clientsContracts;
     }
 
-    public void setClientsContracts(Map<Client, Contract> clientsContracts) {
+    public void setClientsContracts(Map<Contract, Client> clientsContracts) {
         this.clientsContracts = clientsContracts;
     }
 
@@ -186,10 +186,10 @@ public class HamaliCompany implements Menu {
         int sum;
         for (Driver driver : drivers) {
             sum = 0;
-            for (Map.Entry<Client, Contract> clientContract : clientsContracts.entrySet()) {
-                if (driver.equals(clientContract.getValue().getDriver()) && clientContract.getValue().getDepartureDate().isAfter(startDate) &&
-                        clientContract.getValue().getArrivalDate().isBefore(endDate)) {
-                    sum += clientContract.getValue().getDriverSalary();
+            for (Map.Entry<Contract, Client> clientContract : clientsContracts.entrySet()) {
+                if (driver.equals(clientContract.getKey().getDriver()) && clientContract.getKey().getDepartureDate().isAfter(startDate) &&
+                        clientContract.getKey().getArrivalDate().isBefore(endDate)) {
+                    sum += clientContract.getKey().getDriverSalary();
                 }
             }
             System.out.println(driver.getFirstName() + " " + driver.getLastName() + " - " + sum + " lei");
@@ -250,10 +250,10 @@ public class HamaliCompany implements Menu {
         int sum;
         for (Client client : clients) {
             sum = 0;
-            for (Map.Entry<Client, Contract> clientContract : clientsContracts.entrySet()) {
-                if (client.equals(clientContract.getKey()) && clientContract.getValue().getDepartureDate().isAfter(startDate) &&
-                        clientContract.getValue().getArrivalDate().isBefore(endDate)) {
-                    sum += clientContract.getValue().getDriverSalary();
+            for (Map.Entry<Contract, Client> clientContract : clientsContracts.entrySet()) {
+                if (client.equals(clientContract.getKey()) && clientContract.getKey().getDepartureDate().isAfter(startDate) &&
+                        clientContract.getKey().getArrivalDate().isBefore(endDate)) {
+                    sum += clientContract.getKey().getDriverSalary();
                 }
                 System.out.println(client.getFirstName() + " " + client.getLastName() + " - " + sum + " lei");
             }
@@ -262,7 +262,7 @@ public class HamaliCompany implements Menu {
 
     private void showContracts() {
         System.out.print("Contracts:");
-        for (Contract contract : clientsContracts.values()) {
+        for (Contract contract : clientsContracts.keySet()) {
             System.out.println(contract);
         }
         System.out.println();
@@ -270,9 +270,9 @@ public class HamaliCompany implements Menu {
 
     private void showClientsContracts() {
         System.out.println("Clients and their contracts:");
-        for (Map.Entry<Client, Contract> clientContract : clientsContracts.entrySet()) {
-            System.out.println(clientContract.getKey());
+        for (Map.Entry<Contract, Client> clientContract : clientsContracts.entrySet()) {
             System.out.println(clientContract.getValue());
+            System.out.println(clientContract.getKey() + "\n");
         }
     }
 
@@ -299,7 +299,7 @@ public class HamaliCompany implements Menu {
         System.out.print("\nEnter price per km: ");
         double kmPrice = scanner.nextDouble();
 
-        clientsContracts.put(client, new Contract(route, departureDate, arrivalDate, driver, kmPrice));
+        clientsContracts.put(new Contract(route, departureDate, arrivalDate, driver, kmPrice), client);
     }
 
     private Client findClient(String firstName, String lastName) {
