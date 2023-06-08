@@ -14,8 +14,9 @@ public class Contract {
     public Contract() {
     }
 
-    public Contract(Route route, Driver driver, double kmPrice) {
+    public Contract(Route route, LocalDate arrivalDate, Driver driver, double kmPrice) {
         this.route = route;
+        this.arrivalDate = arrivalDate;
         this.driver = driver;
         this.kmPrice = kmPrice;
     }
