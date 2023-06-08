@@ -4,7 +4,8 @@ public class Main {
                 Reader.readBranches(),
                 Reader.readDrivers(),
                 Reader.readClients(),
-                Reader.readRoutes());
+                Reader.readRoutes()
+        );
         hamaliCompany.realizeMenu();
     }
 }

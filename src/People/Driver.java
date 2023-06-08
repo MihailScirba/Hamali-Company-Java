@@ -1,6 +1,6 @@
 package People;
 
-public class Driver extends Person{
+public class Driver extends Person {
     private int workExperience;
     private String category;
 
