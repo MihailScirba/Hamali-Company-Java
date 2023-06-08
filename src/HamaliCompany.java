@@ -1,3 +1,4 @@
+import Exceptions.IllegalChoiceException;
 import OfficialPart.Branch;
 import OfficialPart.Contract;
 import OfficialPart.Route;
@@ -10,6 +11,7 @@ import java.util.*;
 public class HamaliCompany implements Menu {
     public static final String RESET = "\033[0m";
     public static final String GREEN_BOLD_BRIGHT = "\033[1;92m";
+    private static final int MAX_NR_CHOICES = 16;
     Scanner scanner = new Scanner(System.in);
     private List<Branch> branches;
     private List<Driver> drivers;
@@ -117,8 +119,21 @@ public class HamaliCompany implements Menu {
 
     @Override
     public int readChoice() {
-        System.out.print("Enter your choice: ");
-        return scanner.nextInt();
+        int choice;
+        while (true) {
+            try {
+                System.out.print("Enter your choice: ");
+                choice = scanner.nextInt();
+                if (choice < 0 || choice > MAX_NR_CHOICES) {
+                    throw new IllegalChoiceException();
+                }
+                break;
+            } catch (IllegalChoiceException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        return choice;
     }
 
     @Override
