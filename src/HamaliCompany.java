@@ -5,11 +5,7 @@ import People.Client;
 import People.Driver;
 
 import java.time.LocalDate;
-import java.util.Scanner;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 
 public class HamaliCompany implements Menu {
     public static final String RESET = "\033[0m";
@@ -19,7 +15,7 @@ public class HamaliCompany implements Menu {
     private List<Driver> drivers;
     private List<Client> clients;
     private List<Route> routes;
-    private Map<Contract, Client> clientsContracts = new HashMap<>();
+    private Map<Client, List<Contract>> clientsContracts = new HashMap<>();
 
     public HamaliCompany() {
         this.branches = new LinkedList<>();
@@ -35,8 +31,9 @@ public class HamaliCompany implements Menu {
         this.routes = routes;
     }
 
-    public HamaliCompany(List<Branch> branches, List<Driver> drivers, List<Client> clients, List<Route> routes,
-                         Map<Contract, Client> clientsContracts) {
+    public HamaliCompany(Scanner scanner, List<Branch> branches, List<Driver> drivers, List<Client> clients,
+                         List<Route> routes, Map<Client, List<Contract>> clientsContracts) {
+        this.scanner = scanner;
         this.branches = branches;
         this.drivers = drivers;
         this.clients = clients;
@@ -68,11 +65,19 @@ public class HamaliCompany implements Menu {
         this.clients = clients;
     }
 
-    public Map<Contract, Client> getClientsContracts() {
+    public List<Route> getRoutes() {
+        return routes;
+    }
+
+    public void setRoutes(List<Route> routes) {
+        this.routes = routes;
+    }
+
+    public Map<Client, List<Contract>> getClientsContracts() {
         return clientsContracts;
     }
 
-    public void setClientsContracts(Map<Contract, Client> clientsContracts) {
+    public void setClientsContracts(Map<Client, List<Contract>> clientsContracts) {
         this.clientsContracts = clientsContracts;
     }
 
@@ -121,6 +126,7 @@ public class HamaliCompany implements Menu {
         switch (choice) {
             case 0 -> {
                 System.out.println("You've finished with success");
+                scanner.close();
                 return false;
             }
             case 1 -> showBranches();
@@ -186,10 +192,12 @@ public class HamaliCompany implements Menu {
         int sum;
         for (Driver driver : drivers) {
             sum = 0;
-            for (Map.Entry<Contract, Client> clientContract : clientsContracts.entrySet()) {
-                if (driver.equals(clientContract.getKey().getDriver()) && clientContract.getKey().getDepartureDate().isAfter(startDate) &&
-                        clientContract.getKey().getArrivalDate().isBefore(endDate)) {
-                    sum += clientContract.getKey().getDriverSalary();
+            for (Map.Entry<Client, List<Contract>> clientContract : clientsContracts.entrySet()) {
+                for (Contract contract : clientContract.getValue()) {
+                    if (driver.equals(contract.getDriver()) && contract.getDepartureDate().isAfter(startDate) &&
+                            contract.getArrivalDate().isBefore(endDate)) {
+                        sum += contract.getDriverSalary();
+                    }
                 }
             }
             System.out.println(driver.getFirstName() + " " + driver.getLastName() + " - " + sum + " lei");
@@ -250,10 +258,12 @@ public class HamaliCompany implements Menu {
         int sum;
         for (Client client : clients) {
             sum = 0;
-            for (Map.Entry<Contract, Client> clientContract : clientsContracts.entrySet()) {
-                if (client.equals(clientContract.getKey()) && clientContract.getKey().getDepartureDate().isAfter(startDate) &&
-                        clientContract.getKey().getArrivalDate().isBefore(endDate)) {
-                    sum += clientContract.getKey().getDriverSalary();
+            for (Map.Entry<Client, List<Contract>> clientContract : clientsContracts.entrySet()) {
+                for (Contract contract : clientContract.getValue()) {
+                    if (client.equals(clientContract.getKey()) && contract.getDepartureDate().isAfter(startDate) &&
+                            contract.getArrivalDate().isBefore(endDate)) {
+                        sum += contract.getDriverSalary();
+                    }
                 }
                 System.out.println(client.getFirstName() + " " + client.getLastName() + " - " + sum + " lei");
             }
@@ -262,17 +272,19 @@ public class HamaliCompany implements Menu {
 
     private void showContracts() {
         System.out.print("Contracts:");
-        for (Contract contract : clientsContracts.keySet()) {
-            System.out.println(contract);
+        for (List<Contract> contracts : clientsContracts.values()) {
+            for (Contract contract : contracts) {
+                System.out.println(contract + "\n");
+            }
         }
         System.out.println();
     }
 
     private void showClientsContracts() {
         System.out.println("Clients and their contracts:");
-        for (Map.Entry<Contract, Client> clientContract : clientsContracts.entrySet()) {
+        for (Map.Entry<Client, List<Contract>> clientContract : clientsContracts.entrySet()) {
+            System.out.println(clientContract.getKey());
             System.out.println(clientContract.getValue());
-            System.out.println(clientContract.getKey() + "\n");
         }
     }
 
@@ -299,7 +311,10 @@ public class HamaliCompany implements Menu {
         System.out.print("\nEnter price per km: ");
         double kmPrice = scanner.nextDouble();
 
-        clientsContracts.put(new Contract(route, departureDate, arrivalDate, driver, kmPrice), client);
+        if (!clientsContracts.containsKey(client)) {
+            clientsContracts.put(client, new ArrayList<>());
+        }
+        clientsContracts.get(client).add(new Contract(route, departureDate, arrivalDate, driver, kmPrice));
     }
 
     private Client findClient(String firstName, String lastName) {
