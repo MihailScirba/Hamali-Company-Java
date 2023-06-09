@@ -61,6 +61,7 @@ public class Reader {
             }
             scanner.close();
         } catch (IOException e) {
+            System.out.println("fisierul nu a fost gasti");
             e.printStackTrace();
         }
         return clients;
