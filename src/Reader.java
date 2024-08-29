@@ -36,9 +36,11 @@ public class Reader {
     public static List<Branch> readBranches() {
         List<Branch> branches = new LinkedList<>();
         try {
-            scanner = new Scanner(Path.of("src\\InputFiles\\Branches.in"));
+            scanner = new Scanner(
+                    Path.of("src/InputFiles/Branches" + ".in"));
             while (scanner.hasNextLine()) {
-                branches.add(new Branch(scanner.next(), scanner.next(), scanner.next(), scanner.next()));
+                branches.add(new Branch(scanner.next(), scanner.next(),
+                        scanner.next(), scanner.next()));
             }
             scanner.close();
         } catch (IOException e) {
@@ -55,9 +57,11 @@ public class Reader {
     public static List<Client> readClients() {
         List<Client> clients = new LinkedList<>();
         try {
-            scanner = new Scanner(Path.of("src\\InputFiles\\Clients.in"));
+            scanner =
+                    new Scanner(Path.of("src/InputFiles/Clients.in"));
             while (scanner.hasNextLine()) {
-                clients.add(new Client(scanner.next(), scanner.next(), scanner.next()));
+                clients.add(new Client(scanner.next(), scanner.next(),
+                        scanner.next()));
             }
             scanner.close();
         } catch (IOException e) {
@@ -70,9 +74,11 @@ public class Reader {
     public static List<Driver> readDrivers() {
         List<Driver> drivers = new LinkedList<>();
         try {
-            scanner = new Scanner(Path.of("src\\InputFiles\\Drivers.in"));
+            scanner =
+                    new Scanner(Path.of("src/InputFiles/Drivers.in"));
             while (scanner.hasNextLine()) {
-                drivers.add(new Driver(scanner.next(), scanner.next(), scanner.nextInt(), scanner.next()));
+                drivers.add(new Driver(scanner.next(), scanner.next(),
+                        scanner.nextInt(), scanner.next()));
             }
             scanner.close();
         } catch (IOException e) {
@@ -94,7 +100,7 @@ public class Reader {
     public static List<Route> readRoutes() {
         List<Route> routes = new LinkedList<>();
         try {
-            scanner = new Scanner(Path.of("src\\InputFiles\\Routes.in"));
+            scanner = new Scanner(Path.of("src/InputFiles/Routes.in"));
             while (scanner.hasNextLine()) {
                 routes.add(new Route(scanner.next(), scanner.nextInt()));
             }
